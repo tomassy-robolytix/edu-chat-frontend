@@ -1,3 +1,16 @@
 <html>
-  <body><h1>Hello world</h1></body>
+<body>
+<h1>Hello world</h1>
+<button id="btn">Získat zprávu z backendu</button>
+<p id="msg"></p>
+
+<script>
+document.getElementById('btn').addEventListener('click', async () => {
+  const response = await fetch('URL_TVÉ_FUNCTION_API/HelloFunction');
+  const text = await response.text();
+  document.getElementById('msg').textContent = text;
+});
+</script>
+
+</body>
 </html>
