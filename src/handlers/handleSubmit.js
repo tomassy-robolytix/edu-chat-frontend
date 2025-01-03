@@ -1,4 +1,6 @@
-export const handleSubmit = async (formData, setUsers, setFormData, API_URL) => {
+import { API_URL } from "../config";
+
+export const handleSubmit = async (formData, setUsers, setFormData) => {
   try {
     const method = formData.id ? "PUT" : "POST"; // Rozhodni, zda je to update nebo create
     const response = await fetch(API_URL, {
@@ -21,7 +23,15 @@ export const handleSubmit = async (formData, setUsers, setFormData, API_URL) => 
             user.id === updatedUser.id ? updatedUser : user
           ) // Aktualizace existujícího uživatele
     );
-    setFormData({ id: "", name: "", progress: "", grade: "", sis: "", sisLogin: "", sisPassword: "" });
+    setFormData({
+      id: "",
+      name: "",
+      progress: "",
+      grade: "",
+      sis: "",
+      sisLogin: "",
+      sisPassword: "",
+    });
   } catch (err) {
     console.error("Error submitting user:", err);
   }
