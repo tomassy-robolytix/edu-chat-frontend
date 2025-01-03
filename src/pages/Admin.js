@@ -13,7 +13,16 @@ import {
 import { handleSubmit } from "../handlers/handleSubmit";
 import { handleEdit } from "../handlers/handleEdit";
 
-const API_URL = "https://edu-chat-functions-node.azurewebsites.net/api/HelloFunction?code=-OKtQBUYEufhOHibr91cG4I8WXMe_geBd4_PKEk4IJQeAzFu1aF8LA==";
+// Import proměnné API_URL
+
+import { API_URL } from "../config";
+
+fetch(API_URL, {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 const Admin = () => {
   const [users, setUsers] = useState([]);
