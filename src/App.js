@@ -13,20 +13,28 @@ function App() {
       .catch((err) => console.error("Error fetching data:", err));
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    })
-      .then((res) => res.json())
-      .then((newUser) => {
-        setUsers([...users, newUser]);
-        setFormData({ id: "", name: "", progress: "" });
-      })
-      .catch((err) => console.error("Error adding user:", err));
-  };
+const handleSubmit = async (e) => {
+    e.preventDefault(); // Zabrání přesměrování stránky
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData), // Odesílá data jako JSON
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const newUser = await response.json(); // Zpracuje odpověď jako JSON
+        setUsers([...users, newUser]); // Přidá nového uživatele do tabulky
+        setFormData({ id: "", name: "", progress: "" }); // Vyčistí formulář
+    } catch (err) {
+        console.error("Error adding user:", err);
+    }
+};
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
