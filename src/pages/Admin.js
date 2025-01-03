@@ -94,7 +94,7 @@ const Admin = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmit(formData, setUsers, setFormData, API_URL);
+          handleSubmit(formData, setUsers, setFormData);
         }}
         style={{
           display: "flex",
