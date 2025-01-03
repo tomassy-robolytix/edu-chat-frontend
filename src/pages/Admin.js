@@ -1,4 +1,15 @@
 import React, { useEffect, useState } from "react";
+import {
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import { handleSubmit } from "../handlers/handleSubmit";
 import { handleEdit } from "../handlers/handleEdit";
 
@@ -6,7 +17,15 @@ const API_URL = "https://edu-chat-functions-node.azurewebsites.net/api/HelloFunc
 
 const Admin = () => {
   const [users, setUsers] = useState([]);
-  const [formData, setFormData] = useState({ id: "", name: "", progress: "", grade: "", sis: "", sisLogin: "", sisPassword: "" });
+  const [formData, setFormData] = useState({
+    id: "",
+    name: "",
+    progress: "",
+    grade: "",
+    sis: "",
+    sisLogin: "",
+    sisPassword: "",
+  });
 
   useEffect(() => {
     fetch(API_URL)
@@ -16,109 +35,115 @@ const Admin = () => {
   }, []);
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h1 style={{ textAlign: "center" }}>Admin Dashboard</h1>
-      <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "20px" }}>
-        <thead>
-          <tr>
-            <th style={{ border: "1px solid black", padding: "10px", textAlign: "left" }}>ID</th>
-            <th style={{ border: "1px solid black", padding: "10px", textAlign: "left" }}>Name</th>
-            <th style={{ border: "1px solid black", padding: "10px", textAlign: "left" }}>Progress</th>
-            <th style={{ border: "1px solid black", padding: "10px", textAlign: "left" }}>Grade</th>
-            <th style={{ border: "1px solid black", padding: "10px", textAlign: "left" }}>SIS</th>
-            <th style={{ border: "1px solid black", padding: "10px", textAlign: "left" }}>SIS Login</th>
-            <th style={{ border: "1px solid black", padding: "10px", textAlign: "left" }}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td style={{ border: "1px solid black", padding: "10px" }}>{user.id}</td>
-              <td style={{ border: "1px solid black", padding: "10px" }}>{user.name}</td>
-              <td style={{ border: "1px solid black", padding: "10px" }}>{user.progress}%</td>
-              <td style={{ border: "1px solid black", padding: "10px" }}>{user.grade}</td>
-              <td style={{ border: "1px solid black", padding: "10px" }}>{user.sis}</td>
-              <td style={{ border: "1px solid black", padding: "10px" }}>{user.sisLogin}</td>
-              <td style={{ border: "1px solid black", padding: "10px" }}>
-                <button
-                  style={{ marginRight: "5px", padding: "5px", backgroundColor: "#007BFF", color: "white", border: "none", cursor: "pointer" }}
-                  onClick={() => handleEdit(user, setFormData)}
-                >
-                  Edit
-                </button>
-                <button
-                  style={{ padding: "5px", backgroundColor: "#DC3545", color: "white", border: "none", cursor: "pointer" }}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div style={{ padding: "20px" }}>
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Admin Dashboard</h1>
+
+      {/* Tabulka uživatelů */}
+      <TableContainer component={Paper} style={{ marginBottom: "20px" }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Progress</TableCell>
+              <TableCell>Grade</TableCell>
+              <TableCell>SIS</TableCell>
+              <TableCell>SIS Login</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.id}</TableCell>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.progress}%</TableCell>
+                <TableCell>{user.grade}</TableCell>
+                <TableCell>{user.sis}</TableCell>
+                <TableCell>{user.sisLogin}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ marginRight: "10px" }}
+                    onClick={() => handleEdit(user, setFormData)}
+                  >
+                    Edit
+                  </Button>
+                  <Button variant="contained" color="error">
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Formulář pro přidání/upravení uživatele */}
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Add/Edit User</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit(formData, setUsers, setFormData, API_URL);
         }}
-        style={{ display: "flex", flexDirection: "column", maxWidth: "400px", margin: "auto" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "15px",
+          maxWidth: "500px",
+          margin: "auto",
+        }}
       >
-        <h2 style={{ textAlign: "center" }}>Add/Edit User</h2>
-        <input
-          type="text"
-          placeholder="ID"
+        <TextField
+          label="ID"
           value={formData.id}
           onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-          style={{ padding: "10px", marginBottom: "10px" }}
+          fullWidth
         />
-        <input
-          type="text"
-          placeholder="Name"
+        <TextField
+          label="Name"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          style={{ padding: "10px", marginBottom: "10px" }}
+          fullWidth
         />
-        <input
+        <TextField
+          label="Progress"
           type="number"
-          placeholder="Progress"
           value={formData.progress}
           onChange={(e) => setFormData({ ...formData, progress: e.target.value })}
-          style={{ padding: "10px", marginBottom: "10px" }}
+          fullWidth
         />
-        <input
+        <TextField
+          label="Grade"
           type="number"
-          placeholder="Grade"
           value={formData.grade}
           onChange={(e) => setFormData({ ...formData, grade: e.target.value })}
-          style={{ padding: "10px", marginBottom: "10px" }}
+          fullWidth
         />
-        <input
-          type="text"
-          placeholder="SIS"
+        <TextField
+          label="SIS"
           value={formData.sis}
           onChange={(e) => setFormData({ ...formData, sis: e.target.value })}
-          style={{ padding: "10px", marginBottom: "10px" }}
+          fullWidth
         />
-        <input
-          type="text"
-          placeholder="SIS Login"
+        <TextField
+          label="SIS Login"
           value={formData.sisLogin}
           onChange={(e) => setFormData({ ...formData, sisLogin: e.target.value })}
-          style={{ padding: "10px", marginBottom: "10px" }}
+          fullWidth
         />
-        <input
+        <TextField
+          label="SIS Password"
           type="password"
-          placeholder="SIS Password"
           value={formData.sisPassword}
           onChange={(e) => setFormData({ ...formData, sisPassword: e.target.value })}
-          style={{ padding: "10px", marginBottom: "10px" }}
+          fullWidth
         />
-        <button
-          type="submit"
-          style={{ padding: "10px", backgroundColor: "#28A745", color: "white", border: "none", cursor: "pointer" }}
-        >
+        <Button variant="contained" color="success" type="submit" fullWidth>
           Submit
-        </button>
+        </Button>
       </form>
     </div>
   );
