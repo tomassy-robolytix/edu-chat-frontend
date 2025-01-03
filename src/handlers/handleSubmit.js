@@ -1,22 +1,26 @@
 export const handleSubmit = async (formData, setUsers, setFormData, API_URL) => {
   try {
-    const method = formData.id ? "PUT" : "POST"; // Rozlišení mezi přidáním a editací
+    const method = formData.id ? "PUT" : "POST"; // Rozhodni, zda je to update nebo create
     const response = await fetch(API_URL, {
-      method,
-      headers: { "Content-Type": "application/json" },
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(formData),
     });
 
-    if (!response.ok) throw new Error(`Error: ${response.status}`);
-
-    const updatedUser = await response.json();
-
-    if (method === "PUT") {
-      setUsers((users) => users.map((user) => (user.id === updatedUser.id ? updatedUser : user)));
-    } else {
-      setUsers((users) => [...users, updatedUser]);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
+    const updatedUser = await response.json();
+    setUsers((prevUsers) =>
+      method === "POST"
+        ? [...prevUsers, updatedUser] // Přidání nového uživatele
+        : prevUsers.map((user) =>
+            user.id === updatedUser.id ? updatedUser : user
+          ) // Aktualizace existujícího uživatele
+    );
     setFormData({ id: "", name: "", progress: "", grade: "", sis: "", sisLogin: "", sisPassword: "" });
   } catch (err) {
     console.error("Error submitting user:", err);
